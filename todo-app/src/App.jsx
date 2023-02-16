@@ -21,6 +21,24 @@ const App = () => {
     setIncompleteTodos(newTodos);
   }
 
+  const completeTask = (index) => {
+    const newInCompleteTodos = [...incompleteTodos];
+    newInCompleteTodos.splice(index,1);
+
+    const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
+    setIncompleteTodos(newInCompleteTodos);
+    setCompleteTodos(newCompleteTodos);
+  }
+
+  const undoTask = (index) => {
+    const newCompleteTodos = [...completeTodos];
+    newCompleteTodos.splice(index,1);
+
+    const newInCompleteTodos = [...incompleteTodos, completeTodos[index]];
+    setIncompleteTodos(newInCompleteTodos);
+    setCompleteTodos(newCompleteTodos);
+  }
+
   return (
     <>
       <div className="input_area">
@@ -34,7 +52,7 @@ const App = () => {
             return (
               <div key={todo} className="list_row">
                 <li>{todo}</li>
-                <button>完了</button>
+                <button onClick={() => completeTask(index)}>完了</button>
                 <button onClick={() => deleteTask(index)}>削除</button>
               </div>
             );
@@ -43,11 +61,11 @@ const App = () => {
       </div >
       <div className="complete_area">
         <p className="title">完了のTODO</p>
-        {completeTodos.map((todo) => {
+        {completeTodos.map((todo, index) => {
           return (
             <div key={todo} className="list_row">
               <li>{todo}</li>
-              <button>完了</button>
+              <button onClick={() => undoTask(index)}>戻す</button>
             </div>
           );
         })}
