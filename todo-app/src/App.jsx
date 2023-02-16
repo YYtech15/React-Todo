@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import InputTodo from "./components/InputTodo";
+import InCompleteTodo from "./components/InCompleteTodo";
+import CompleteTodo from "./components/CompleteTodo";
 import "./style.css";
 
 const App = () => {
@@ -17,13 +20,13 @@ const App = () => {
 
   const deleteTask = (index) => {
     const newTodos = [...incompleteTodos];
-    newTodos.splice(index,1);
+    newTodos.splice(index, 1);
     setIncompleteTodos(newTodos);
   }
 
   const completeTask = (index) => {
     const newInCompleteTodos = [...incompleteTodos];
-    newInCompleteTodos.splice(index,1);
+    newInCompleteTodos.splice(index, 1);
 
     const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
     setIncompleteTodos(newInCompleteTodos);
@@ -32,7 +35,7 @@ const App = () => {
 
   const undoTask = (index) => {
     const newCompleteTodos = [...completeTodos];
-    newCompleteTodos.splice(index,1);
+    newCompleteTodos.splice(index, 1);
 
     const newInCompleteTodos = [...incompleteTodos, completeTodos[index]];
     setIncompleteTodos(newInCompleteTodos);
@@ -41,35 +44,9 @@ const App = () => {
 
   return (
     <>
-      <div className="input_area">
-        <input id="add_text" placeholder="TODOを入力" value={todoText} onChange={onChangeTodoText} />
-        <button id="add_button" onClick={addTask}>追加</button>
-      </div>
-      <div className="incomplete_area">
-        <p className="title">未完了のTODO</p>
-        <ul>
-          {incompleteTodos.map((todo, index) => {
-            return (
-              <div key={todo} className="list_row">
-                <li>{todo}</li>
-                <button onClick={() => completeTask(index)}>完了</button>
-                <button onClick={() => deleteTask(index)}>削除</button>
-              </div>
-            );
-          })}
-        </ul>
-      </div >
-      <div className="complete_area">
-        <p className="title">完了のTODO</p>
-        {completeTodos.map((todo, index) => {
-          return (
-            <div key={todo} className="list_row">
-              <li>{todo}</li>
-              <button onClick={() => undoTask(index)}>戻す</button>
-            </div>
-          );
-        })}
-      </div>
+      <InputTodo todoText={todoText} onChange={onChangeTodoText} onClick={addTask} />
+      <InCompleteTodo incompleteTodos={incompleteTodos} completeCLick={completeTask} deleteClick={deleteTask}/>
+      <CompleteTodo completeTodos={completeTodos} undoCLick={undoTask}/>
     </>
   );
 };
